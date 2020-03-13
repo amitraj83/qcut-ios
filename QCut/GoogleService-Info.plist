@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>565564103314-kdgbmdam0i9p3nc60617l1l0ag5ku0hf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.565564103314-kdgbmdam0i9p3nc60617l1l0ag5ku0hf</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAFPqb97H-dsOYIoD9iFrJIQdHQSPd9yV0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>565564103314</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.qcut.customer</string>
+	<key>PROJECT_ID</key>
+	<string>qcut-d0682</string>
+	<key>STORAGE_BUCKET</key>
+	<string>qcut-d0682.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:565564103314:ios:27935b2a938418a0df244b</string>
+	<key>DATABASE_URL</key>
+	<string>https://qcut-d0682.firebaseio.com</string>
+</dict>
+</plist>
