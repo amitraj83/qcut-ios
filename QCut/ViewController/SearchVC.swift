@@ -13,7 +13,6 @@ import CoreLocation
 class SearchVC: UIViewController {
 
     @IBOutlet weak var barberShopTV: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
     
     var barberShopArr = [BarberShop]()
     let locationManager = CLLocationManager()
@@ -89,19 +88,11 @@ extension SearchVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BarbershopCell", for: indexPath) as! BarbershopCell
-        cell.street1UL.text = barberShopArr[indexPath.row].street1
-        cell.street2UL.text = barberShopArr[indexPath.row].street2
-        let maplink = barberShopArr[indexPath.row].gMapLink
-        let lat = maplink.components(separatedBy: ",")[0]
-        let lon = maplink.components(separatedBy: ",")[1]
         
         let myLocation = CLLocation(latitude: self.lat, longitude: self.lon)
-//        let myLocation = CLLocation(latitude: 53.393532, longitude: -6.385874)
-        let barberLocation = CLLocation(latitude: Double(lat) as! CLLocationDegrees, longitude: Double(lon) as! CLLocationDegrees)
-        let distance = myLocation.distance(from: barberLocation)
-        let strDistance = String(format: "%.1f", distance / 1000)
-        cell.distabceUL.text = strDistance + "Km"
-        print("\(distance)")
+        //        let myLocation = CLLocation(latitude: 53.393532, longitude: -6.385874)
+        
+        cell.initWithData(barber: barberShopArr[indexPath.row], myLocation: myLocation)
         return cell
     }
     
@@ -112,7 +103,12 @@ extension SearchVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+        vc.barberShop = barberShopArr[indexPath.row]
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 160
     }
 }
 
@@ -123,4 +119,5 @@ extension SearchVC: CLLocationManagerDelegate {
         self.lat = locValue.latitude
         self.lon = locValue.longitude
     }
+
 }

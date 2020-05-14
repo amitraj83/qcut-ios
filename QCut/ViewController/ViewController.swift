@@ -12,19 +12,26 @@ import IMSegmentPageView
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var shopName: UILabel!
+    @IBOutlet weak var street1: UILabel!
+    @IBOutlet weak var street2: UILabel!
     @IBOutlet weak var locationUV: UIView!
-    @IBOutlet weak var queueUV: UIView!
     @IBOutlet weak var likesUV: UIView!
     
+    @IBOutlet weak var topView: UIView!
     @IBOutlet weak var segmentUV: UIView!
     
     var titleView: IMSegmentTitleView?
     var pageView: IMPageContentView?
     
+    var barberShop: BarberShop = BarberShop()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 //        self.tabBarController.show
+        topView.setShadowRadiusToUIView()
+        self.view.bringSubviewToFront(topView)
         initUIView()
     }
     
@@ -50,8 +57,13 @@ class ViewController: UIViewController {
         titleView!.delegate = self
         segmentUV.addSubview(titleView!)
         
+        shopName.text = barberShop.shopName
+        street1.text = barberShop.street1
+        street2.text = barberShop.street2 + ", " + barberShop.city
+        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc1 = storyboard.instantiateViewController(withIdentifier: "ServicesViewController") as! ServicesViewController
+        vc1.barberShop = barberShop
         let vc2 = storyboard.instantiateViewController(withIdentifier: "QueueViewController") as! QueueViewController
         let vc3 = storyboard.instantiateViewController(withIdentifier: "DetailsViewController") as! DetailsViewController
         
@@ -68,17 +80,13 @@ class ViewController: UIViewController {
     }
     
     func initUIView() {
-        locationUV.layer.cornerRadius = 5.0
-        locationUV.layer.borderColor = UIColor(named: "colorMainBorder")?.cgColor
-        locationUV.layer.borderWidth = 1.0
-        
-        queueUV.layer.cornerRadius = 5.0
-        queueUV.layer.borderColor = UIColor(named: "colorMainBorder")?.cgColor
-        queueUV.layer.borderWidth = 1.0
-        
-        likesUV.layer.cornerRadius = 5.0
-        likesUV.layer.borderColor = UIColor(named: "colorMainBorder")?.cgColor
-        likesUV.layer.borderWidth = 1.0
+//        locationUV.layer.cornerRadius = 20.0
+//        locationUV.layer.borderColor = UIColor.yellow.cgColor
+//        locationUV.layer.borderWidth = 2.0
+//        
+//        likesUV.layer.cornerRadius = 20.0
+//        likesUV.layer.borderColor = UIColor.yellow.cgColor
+//        likesUV.layer.borderWidth = 2.0
     }
 
 }

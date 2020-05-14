@@ -14,6 +14,8 @@ class ServicesViewController: UIViewController {
     
     @IBOutlet weak var serviceUTV: UITableView!
     
+    var barberShop: BarberShop = BarberShop()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,7 +28,7 @@ class ServicesViewController: UIViewController {
     func initUIView() {
         queueUV.layer.cornerRadius = 20.0
         queueUV.layer.borderWidth = 2.0
-        queueUV.layer.borderColor = UIColor(named: "colorMainGreen")?.cgColor
+        queueUV.layer.borderColor = UIColor.systemBlue.cgColor
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(onTapJoin))
         queueUV.addGestureRecognizer(gesture)
@@ -44,12 +46,16 @@ class ServicesViewController: UIViewController {
     */
     
     @objc func onTapJoin() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "SelectBarberVC") as! SelectBarberVC
-        vc.providesPresentationContextTransitionStyle = true
-        vc.definesPresentationContext = true
-        vc.selectBarberDelegate = self
-        self.present(vc, animated: true, completion: nil)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let vc = storyboard.instantiateViewController(withIdentifier: "SelectBarberVC") as! SelectBarberVC
+//        vc.providesPresentationContextTransitionStyle = true
+//        vc.definesPresentationContext = true
+//        vc.selectBarberDelegate = self
+//        self.present(vc, animated: true, completion: nil)
+        Global.isQueued = true
+        Global.gBarberShop = barberShop
+        self.tabBarController?.selectedIndex = 1
+        self.navigationController?.popToRootViewController(animated: false)
     }
 
 }

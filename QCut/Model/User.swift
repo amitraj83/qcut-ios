@@ -30,6 +30,6 @@ class User {
     func fromFirebase(data: [String: Any]) {
         id = data["id"] as! String
         email = data["email"] as! String
-        photo = data["photo"] as! String
+//        photo = data["photo"] as! String
     }
 }

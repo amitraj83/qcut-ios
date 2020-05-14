@@ -11,9 +11,7 @@ import MaterialComponents
 
 class ProfileVC: UIViewController {
 
-    @IBOutlet weak var icAvatar: UIImageView!
-    @IBOutlet weak var icKey: UIImageView!
-    @IBOutlet weak var icLocation: UIImageView!
+    @IBOutlet weak var profileOutLet: UIView!
     @IBOutlet weak var avatarUIMG: UIImageView!
     @IBOutlet weak var cameraUIMG: UIImageView!
     @IBOutlet weak var nameLB: UILabel!
@@ -57,9 +55,7 @@ class ProfileVC: UIViewController {
         let tapLocation = UITapGestureRecognizer(target: self, action: #selector(onTapLocationPen))
         locationEditUIMG.addGestureRecognizer(tapLocation)
         
-        icAvatar.setShadowRadiusToUIView(radius: icAvatar.frame.height / 2)
-        icKey.setShadowRadiusToUIView(radius: icKey.frame.height / 2)
-        icLocation.setShadowRadiusToUIView(radius: icLocation.frame.height / 2)
+        profileOutLet.setShadowRadiusToUIView()
     }
     
     @objc func onTapNamePen() {

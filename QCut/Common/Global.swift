@@ -12,6 +12,7 @@ import SVProgressHUD
 class Global: NSObject {
     static var gUser = User()
     static var isQueued = false
+    static var gBarberShop = BarberShop()
     
     static func onShowProgressView (name: String) {
         SVProgressHUD.show(withStatus: name)

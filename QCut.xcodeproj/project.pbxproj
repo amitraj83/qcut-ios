@@ -40,6 +40,7 @@
 /* Begin PBXFileReference section */
 		1C562F94CD936BB68F11819E /* Pods-QCut.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QCut.release.xcconfig"; path = "Target Support Files/Pods-QCut/Pods-QCut.release.xcconfig"; sourceTree = "<group>"; };
 		35035E199C9000584B799367 /* Pods_QCut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QCut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CEC19F9246704E2003AB372 /* QCut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QCut.entitlements; sourceTree = "<group>"; };
 		45859271241B0E0300C12B54 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		45859273241B0EA600C12B54 /* ServicesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicesViewController.swift; sourceTree = "<group>"; };
 		45859274241B0EA700C12B54 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -108,6 +109,7 @@
 		45AFFD272418D3AC00E94F53 /* QCut */ = {
 			isa = PBXGroup;
 			children = (
+				3CEC19F9246704E2003AB372 /* QCut.entitlements */,
 				45AFFD432418DB1D00E94F53 /* Extension */,
 				45AFFD3F2418DAC900E94F53 /* Font */,
 				45AFFD512419671700E94F53 /* Common */,
@@ -509,6 +511,7 @@
 			baseConfigurationReference = BD096FC1A05CDA1F67C3D3FA /* Pods-QCut.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = QCut/QCut.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MM6R4KM2LB;
 				INFOPLIST_FILE = QCut/Info.plist;
@@ -529,6 +532,7 @@
 			baseConfigurationReference = 1C562F94CD936BB68F11819E /* Pods-QCut.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = QCut/QCut.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MM6R4KM2LB;
 				INFOPLIST_FILE = QCut/Info.plist;

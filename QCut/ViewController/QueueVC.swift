@@ -10,9 +10,11 @@ import UIKit
 
 class QueueVC: UIViewController {
     
+    @IBOutlet weak var shopName: UILabel!
+    @IBOutlet weak var street1: UILabel!
+    @IBOutlet weak var street2: UILabel!
     @IBOutlet weak var locationUV: UIView!
     @IBOutlet weak var favoriteUV: UIView!
-    @IBOutlet weak var timerUV: UIView!
     @IBOutlet weak var scheduleTimeUV: UIView!
     @IBOutlet weak var scheduleTimeLB: UILabel!
     @IBOutlet weak var leaveUB: UIView!
@@ -23,6 +25,8 @@ class QueueVC: UIViewController {
     @IBOutlet weak var dearLB: UILabel!
     @IBOutlet weak var waitingLB: UILabel!
     @IBOutlet weak var topUV: UIView!
+    
+    var barberShop: BarberShop = BarberShop()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,28 +57,23 @@ class QueueVC: UIViewController {
         scheduleTimeUV.layer.borderWidth = 2.0
         
         leaveUB.setShadowRadiusToUIView(radius: leaveUB.frame.height / 2)
-        leaveUB.layer.borderColor = UIColor.mainRed().cgColor
+        leaveUB.layer.borderColor = UIColor.systemBlue.cgColor
         leaveUB.layer.borderWidth = 1.0
         
-        leaveLB.textColor = UIColor.mainRed()
         let tapLeaveUB = UITapGestureRecognizer(target: self, action: #selector(onTapLeaveUB))
         leaveUB.addGestureRecognizer(tapLeaveUB)
         
-        locationUV.layer.cornerRadius = 5.0
-        locationUV.layer.borderColor = UIColor(named: "colorMainBorder")?.cgColor
-        locationUV.layer.borderWidth = 1.0
-        
-        timerUV.layer.cornerRadius = 5.0
-        timerUV.layer.borderColor = UIColor(named: "colorMainBorder")?.cgColor
-        timerUV.layer.borderWidth = 1.0
-        
-        favoriteUV.layer.cornerRadius = 5.0
-        favoriteUV.layer.borderColor = UIColor(named: "colorMainBorder")?.cgColor
-        favoriteUV.layer.borderWidth = 1.0
+        topUV.setShadowRadiusToUIView()
         
         if Global.isQueued {
             print("queued")
             unqueUV.isHidden = true
+            
+            barberShop = Global.gBarberShop
+            
+            shopName.text = barberShop.shopName
+            street1.text = barberShop.street1
+            street2.text = barberShop.street2 + ", " + barberShop.city
             
         } else {
             print("Unqueued")
@@ -83,6 +82,7 @@ class QueueVC: UIViewController {
     }
     
     @objc func onTapLeaveUB() {
+        Global.isQueued = false
         self.tabBarController?.selectedIndex = 0
     }
 }

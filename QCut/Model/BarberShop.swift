@@ -13,12 +13,17 @@ class BarberShop {
     var street1: String
     var street2: String
     var gMapLink: String
+    var shopName: String
+    var city: String
+    
     
     init() {
         id = ""
         street1 = ""
         street2 = ""
         gMapLink = ""
+        shopName = ""
+        city = ""
     }
     
     func fromFirebase(data: [String: Any]) {
@@ -26,5 +31,7 @@ class BarberShop {
         street1 = data["addressLine1"] as! String
         street2 = data["addressLine2"] as! String
         gMapLink = data["gmapLink"] as! String
+        shopName = data["shopName"] as! String
+        city = data["city"] as! String
     }
 }
