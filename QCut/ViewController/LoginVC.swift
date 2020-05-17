@@ -17,12 +17,14 @@ import FBSDKLoginKit
 
 class LoginVC: UIViewController {
     
+    @IBOutlet weak var loginAreaUIV: UIView!
     @IBOutlet weak var mdcEmailTF: MDCTextField!
     @IBOutlet weak var mdcPasswordTF: MDCTextField!
     @IBOutlet weak var signUB: UIButton!
     @IBOutlet weak var facebookUB: UIButton!
     @IBOutlet weak var googleUB: UIButton!
     
+    @IBOutlet weak var signInButnUIV: UIView!
     var emailMDCController: MDCTextInputControllerOutlined?
     var passwordMDCController: MDCTextInputControllerOutlined?
     
@@ -43,6 +45,10 @@ class LoginVC: UIViewController {
     }
     
     func initUIView() {
+        
+        loginAreaUIV.setShadowRadiusToUIView()
+        signInButnUIV.setShadowRadiusToUIView()
+        
         emailMDCController = MDCTextInputControllerOutlined(textInput: mdcEmailTF)
         emailMDCController?.setMDCTextInputOutline()
         
@@ -67,13 +73,15 @@ class LoginVC: UIViewController {
         mdcPasswordTF.rightView = passwordToggleUB
         mdcPasswordTF.rightViewMode = .always
         
-        signUB.setShadowRadiusToUIView(radius: 10.0)
-        signUB.layer.borderColor = UIColor.white.cgColor
-        signUB.layer.borderWidth = 2.0
-        
         facebookUB.setShadowRadiusToUIView(radius: 10.0)
         
         googleUB.setShadowRadiusToUIView(radius: 10.0)
+    }
+    
+    @IBAction func goToSignIn(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "SignUpVC") as! SignUpVC
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func refresh() {
@@ -94,37 +102,21 @@ class LoginVC: UIViewController {
             self.view.makeToast("Password must be over 6 digits.")
         } else {
             Global.onShowProgressView(name: "Connecting")
-            Auth.auth().createUser(withEmail: mdcEmailTF.text!, password: mdcPasswordTF.text!, completion: {(user, error) in
-                if let error = error{
-                    Auth.auth().signIn(withEmail: self.mdcEmailTF.text!, password: self.mdcPasswordTF.text!, completion: {(usr, err) in
-                        if let err = err {
-                            Global.onhideProgressView()
-                            self.view.makeToast("Account does not exist.")
-                        } else {
-                            Global.onhideProgressView()
-                            Database.database().reference().child("Customers").child((usr?.user.uid)!).observe(.value, with: {snapshot in
-                                let postDict = snapshot.value as? [String: AnyObject] ?? [:]
-                                Global.gUser.fromFirebase(data: postDict)
-                                UserDefaults.standard.set("Normal", forKey: "loginType")
-                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                                let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
-                                self.navigationController?.pushViewController(vc, animated: true)
-                            })
-                        }
-                    })
+            
+            Auth.auth().signIn(withEmail: self.mdcEmailTF.text!, password: self.mdcPasswordTF.text!, completion: {(usr, err) in
+                if err != nil {
+                    Global.onhideProgressView()
+                    self.view.makeToast("Account does not exist.")
                 } else {
                     Global.onhideProgressView()
-                    Global.gUser.id = (user?.user.uid)!
-                    Global.gUser.email = self.mdcEmailTF.text!
-                    Global.gUser.photo = ""
-                    
-                    var ref: DatabaseReference!
-                    ref = Database.database().reference()
-                    ref.child("Customers").child(Global.gUser.id).setValue(Global.gUser.toFirebaseData())
-                    UserDefaults.standard.set("Normal", forKey: "loginType")
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
-                    self.navigationController?.pushViewController(vc, animated: true)
+                    Database.database().reference().child("Customers").child((usr?.user.uid)!).observe(.value, with: {snapshot in
+                        let postDict = snapshot.value as? [String: AnyObject] ?? [:]
+                        Global.gUser.fromFirebase(data: postDict)
+                        UserDefaults.standard.set("Normal", forKey: "loginType")
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    })
                 }
             })
         }

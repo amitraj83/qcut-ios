@@ -13,9 +13,9 @@ import MaterialComponents
 extension MDCTextInputControllerOutlined{
     func setMDCTextInputOutline(){
         self.activeColor = UIColor.mainBlue()///underline active color
-        self.normalColor = UIColor.white///underline initial color
+        self.normalColor = .black///underline initial color
         self.underlineHeightActive = 1.0///underline active height
-        self.inlinePlaceholderColor = UIColor.white
+        self.inlinePlaceholderColor = UIColor.gray
         self.floatingPlaceholderNormalColor = UIColor.mainBlue()
         self.floatingPlaceholderActiveColor = UIColor.mainBlue()
     }
@@ -35,5 +35,13 @@ extension MDCTextField {
 
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: self.text)
+    }
+    
+    func usernameEmptyCheck()-> Bool{
+        if (self.text!.count <= 0) {
+            return true
+        } else{
+            return false
+        }
     }
 }

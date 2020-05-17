@@ -8,6 +8,7 @@
 
 import UIKit
 import IMSegmentPageView
+import CoreLocation
 
 
 class ViewController: UIViewController {
@@ -18,11 +19,16 @@ class ViewController: UIViewController {
     @IBOutlet weak var locationUV: UIView!
     @IBOutlet weak var likesUV: UIView!
     
+    @IBOutlet weak var distanceUL: UILabel!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var segmentUV: UIView!
     
     var titleView: IMSegmentTitleView?
     var pageView: IMPageContentView?
+    
+    let locationManager = CLLocationManager()
+    var lat = 0.0
+    var lon = 0.0
     
     var barberShop: BarberShop = BarberShop()
     
@@ -32,6 +38,15 @@ class ViewController: UIViewController {
 //        self.tabBarController.show
         topView.setShadowRadiusToUIView()
         self.view.bringSubviewToFront(topView)
+        
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
+        
         initUIView()
     }
     
@@ -60,6 +75,17 @@ class ViewController: UIViewController {
         shopName.text = barberShop.shopName
         street1.text = barberShop.street1
         street2.text = barberShop.street2 + ", " + barberShop.city
+        
+        let maplink = barberShop.gMapLink
+        let lat = maplink.components(separatedBy: ",")[0]
+        let lon = maplink.components(separatedBy: ",")[1]
+                
+        //        let myLocation = CLLocation(latitude: 53.393532, longitude: -6.385874)
+        let barberLocation = CLLocation(latitude: Double(lat) as! CLLocationDegrees, longitude: Double(lon)!)
+        let myLocation = CLLocation(latitude: self.lat, longitude: self.lon)
+        let distance = myLocation.distance(from: barberLocation)
+        let strDistance = String(format: "%.1f", distance / 1000)
+        distanceUL.text = strDistance + "Km"
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc1 = storyboard.instantiateViewController(withIdentifier: "ServicesViewController") as! ServicesViewController
@@ -109,5 +135,15 @@ extension ViewController: IMSegmentTitleViewDelegate {
         pageView?.contentViewCurrentIndex = endIndex
     }
     
+}
+
+extension ViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        self.lat = locValue.latitude
+        self.lon = locValue.longitude
+    }
+
 }
 

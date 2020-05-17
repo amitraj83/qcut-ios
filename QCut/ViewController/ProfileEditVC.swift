@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 import MaterialComponents
 
 class ProfileEditVC: UIViewController {
@@ -26,6 +27,8 @@ class ProfileEditVC: UIViewController {
     var nameUB: UIButton!
     var passwordUB: UIButton!
     var newPwdUB: UIButton!
+    
+    var locationName: String = "Doublin 10"
     
     var locations = ["Doublin 10","Dublin 11","Dublin 12","Dublin 13","Dublin 14","Dublin 15"]
     
@@ -125,6 +128,20 @@ class ProfileEditVC: UIViewController {
     }
     
     @IBAction func onClickSaveUB(_ sender: Any) {
+        switch type {
+        case 0:
+            
+            break
+        case 1:
+            
+            break
+        case 2:
+            Global.gUser.location = locationName
+        Database.database().reference().child("Customers").child(Global.gUser.id).setValue(Global.gUser.toFirebaseData())
+            break
+        default:
+            break
+        }
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -145,6 +162,6 @@ extension ProfileEditVC: UIPickerViewDataSource {
 
 extension ProfileEditVC: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print(locations[row])
+        locationName = locations[row]
     }
 }

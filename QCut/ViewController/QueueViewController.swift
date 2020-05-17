@@ -40,12 +40,12 @@ class QueueViewController: UIViewController {
     */
     
     @objc func onTapJoin() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "SelectBarberVC") as! SelectBarberVC
-        vc.providesPresentationContextTransitionStyle = true
-        vc.definesPresentationContext = true
-        vc.selectBarberDelegate = self
-        self.present(vc, animated: true, completion: nil)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let vc = storyboard.instantiateViewController(withIdentifier: "SelectBarberVC") as! SelectBarberVC
+//        vc.providesPresentationContextTransitionStyle = true
+//        vc.definesPresentationContext = true
+//        vc.selectBarberDelegate = self
+//        self.present(vc, animated: true, completion: nil)
     }
 
 }

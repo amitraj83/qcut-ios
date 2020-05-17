@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3CC9EE752471C264009E1FDE /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC9EE742471C264009E1FDE /* SignUpVC.swift */; };
 		45859272241B0E0300C12B54 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45859271241B0E0300C12B54 /* ViewController.swift */; };
 		45859276241B0EA700C12B54 /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45859273241B0EA600C12B54 /* ServicesViewController.swift */; };
 		45859277241B0EA700C12B54 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45859274241B0EA700C12B54 /* DetailsViewController.swift */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		1C562F94CD936BB68F11819E /* Pods-QCut.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QCut.release.xcconfig"; path = "Target Support Files/Pods-QCut/Pods-QCut.release.xcconfig"; sourceTree = "<group>"; };
 		35035E199C9000584B799367 /* Pods_QCut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QCut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CC9EE742471C264009E1FDE /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		3CEC19F9246704E2003AB372 /* QCut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QCut.entitlements; sourceTree = "<group>"; };
 		45859271241B0E0300C12B54 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		45859273241B0EA600C12B54 /* ServicesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicesViewController.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				45AFFD5A24197EA200E94F53 /* ProfileVC.swift */,
 				45AFFD63241A33C400E94F53 /* ProfileEditVC.swift */,
 				4585927D241B7EAB00C12B54 /* SelectBarberVC.swift */,
+				3CC9EE742471C264009E1FDE /* SignUpVC.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 				45AFFD472418F2E200E94F53 /* UIViewExtension.swift in Sources */,
 				4585927E241B7EAB00C12B54 /* SelectBarberVC.swift in Sources */,
 				45859277241B0EA700C12B54 /* DetailsViewController.swift in Sources */,
+				3CC9EE752471C264009E1FDE /* SignUpVC.swift in Sources */,
 				45AFFD5724197E7400E94F53 /* SearchVC.swift in Sources */,
 				45AFFD5E241A0E8B00E94F53 /* BarbershopCell.swift in Sources */,
 				45AFFD292418D3AC00E94F53 /* AppDelegate.swift in Sources */,

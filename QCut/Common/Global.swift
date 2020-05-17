@@ -8,11 +8,19 @@
 
 import Foundation
 import SVProgressHUD
+import FirebaseDatabase
 
 class Global: NSObject {
     static var gUser = User()
     static var isQueued = false
     static var gBarberShop = BarberShop()
+    static var waitingTime: CLong = 0
+    
+    static let BARBER_WAITING_QUEUES: String = "barberWaitingQueues"
+    static let BARBERS: String = "barbers"
+    
+    enum Suit: String, CaseIterable { case queue = "QUEUE"; case progress = "PROGRESS"; case done = "DONE"; case removed = "REMOVED"        
+    }
     
     static func onShowProgressView (name: String) {
         SVProgressHUD.show(withStatus: name)

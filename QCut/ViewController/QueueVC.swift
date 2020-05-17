@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class QueueVC: UIViewController {
     
@@ -51,6 +52,40 @@ class QueueVC: UIViewController {
     */
     func initUIView(){
         scheduleTimeLB.textColor = UIColor.mainGreen()
+        
+        var timeString: String = ""
+        if(Global.waitingTime == 0){
+            timeString = "Ready"
+        }else{
+            let hrs = Global.waitingTime / 3600
+            let min = Global.waitingTime / 60
+            let sec = Global.waitingTime % 60
+            
+            var hrsString = ""
+            var minString = ""
+            var secString = ""
+            
+            if(hrs <= 0){
+                hrsString = ""
+            }else if(hrs > 0){
+                hrsString = String(hrs) + " h "
+            }
+            
+            if(min <= 0){
+                minString = ""
+            }else if(min > 0){
+                minString = String(min) + " min "
+            }
+            
+            if(sec <= 0){
+                secString = ""
+            }else if(sec > 0){
+                secString = String(sec) + " sec "
+            }
+            timeString = hrsString + minString + secString
+        }
+        
+        scheduleTimeLB.text = timeString
 //        scheduleTimeUV.roundCorners(corners: [.allCorners], radius: scheduleTimeUV.frame.height / 2)
         scheduleTimeUV.setShadowRadiusToUIView(radius: scheduleTimeUV.frame.height / 2)
         scheduleTimeUV.layer.borderColor = UIColor.mainGreen().cgColor
@@ -82,7 +117,33 @@ class QueueVC: UIViewController {
     }
     
     @objc func onTapLeaveUB() {
-        Global.isQueued = false
-        self.tabBarController?.selectedIndex = 0
+        
+        let customerId = Global.gUser.id
+        Global.onhideProgressView()
+     
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "ddMMyyyy"
+        let curDate = formatter.string(from: date)
+        
+        let queryPath = Global.BARBER_WAITING_QUEUES + "/" + barberShop.id + "_" + curDate
+        
+        Database.database().reference().child(queryPath).observeSingleEvent(of: .value, with: {snap in
+             Global.onhideProgressView()
+             if(snap.exists()){
+                for barbers in snap.children {
+                    let aBarber = barbers as! DataSnapshot
+                    let barberKey = aBarber.key
+                    if(aBarber.hasChild(customerId)){
+                        Database.database().reference().child(queryPath).child(barberKey).child(customerId).child("status").setValue(Global.Suit.removed.rawValue)
+                        
+                        Global.isQueued = false
+                        self.tabBarController?.selectedIndex = 0
+                        
+                    }
+                }
+             }
+         })
+        
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class ServicesViewController: UIViewController {
     
@@ -15,6 +16,8 @@ class ServicesViewController: UIViewController {
     @IBOutlet weak var serviceUTV: UITableView!
     
     var barberShop: BarberShop = BarberShop()
+    var serviceNameArr = [String]()
+    var servicePriceArr = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +35,22 @@ class ServicesViewController: UIViewController {
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(onTapJoin))
         queueUV.addGestureRecognizer(gesture)
+        
+        Global.onShowProgressView(name: "Loading")
+        Database.database().reference().child("servicesAvailable").child(barberShop.id).observe(.value, with: {snap in
+            self.serviceNameArr.removeAll()
+            self.servicePriceArr.removeAll()
+            Global.onhideProgressView()
+            for child in snap.children {
+                let snapChild = child as! DataSnapshot
+                let serviceData = snapChild.value as? [String: Any] ?? [:]
+                let serviceName = serviceData["serviceName"] as! String
+                let servicePrice = serviceData["servicePrice"] as! String
+                self.serviceNameArr.append(serviceName)
+                self.servicePriceArr.append("€ " + servicePrice)
+            }
+            self.serviceUTV.reloadData()
+        })
     }
     
 
@@ -52,21 +71,117 @@ class ServicesViewController: UIViewController {
 //        vc.definesPresentationContext = true
 //        vc.selectBarberDelegate = self
 //        self.present(vc, animated: true, completion: nil)
-        Global.isQueued = true
-        Global.gBarberShop = barberShop
-        self.tabBarController?.selectedIndex = 1
-        self.navigationController?.popToRootViewController(animated: false)
+        
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "ddMMyyyy"
+        let curDate = formatter.string(from: date)
+        
+        Global.waitingTime = 0
+        
+        Global.onShowProgressView(name: "Loading")
+        let childPath = Global.BARBER_WAITING_QUEUES + "/" + barberShop.id + "_" + curDate
+        Database.database().reference().child(childPath).observeSingleEvent(of: .value, with: {snap in
+            if(snap.exists()){
+                var desiredBarberKey: String = ""
+                var latestArrivalTimeLong: CLong = 0
+                var placeInQueue: Int = 0
+                
+                for barbers in snap.children {
+                    let aBarber = barbers as! DataSnapshot
+                    for customers in aBarber.children {
+                        let customer: DataSnapshot = customers as! DataSnapshot
+                        desiredBarberKey = aBarber.key
+                        let customerSnap = customer.value as! [String: AnyObject]
+                        let status = customerSnap["status"] as! String
+                        
+                        if (status == Global.Suit.queue.rawValue) {
+                            placeInQueue +=  1;
+                            let arrivalTime = customerSnap["arrivalTime"] as! CLong
+                            let arrivalTimeLong = CLong(arrivalTime)
+                            if (latestArrivalTimeLong < arrivalTimeLong) {
+                                latestArrivalTimeLong = arrivalTimeLong
+                                Global.waitingTime = customerSnap["expectedWaitingTime"] as! CLong
+                            }
+                        }
+                    }
+                }
+                Global.onhideProgressView()
+                placeInQueue += 1
+                Global.waitingTime = Global.waitingTime + 15
+                self.pushCustomerToQueue(shopKey: self.barberShop.id, desiredBarberKey: desiredBarberKey, maxWaitingTime: Global.waitingTime, placeInQueue: placeInQueue)
+                
+                Global.isQueued = true
+                Global.gBarberShop = self.barberShop
+                self.tabBarController?.selectedIndex = 1
+                self.navigationController?.popToRootViewController(animated: false)
+            } else {
+                Global.onhideProgressView()
+                Database.database().reference().child(Global.BARBERS).child(self.barberShop.id).queryOrdered(byChild: "queueStatus").queryEqual(toValue: "OPEN")
+                    .observeSingleEvent(of: .value, with: {snap in
+                        Global.onhideProgressView()
+                        for child in snap.children {
+                            let barber = child as! DataSnapshot
+                            let desiredBarberKey = barber.key
+                            self.pushCustomerToQueue(shopKey: self.barberShop.id, desiredBarberKey: desiredBarberKey, maxWaitingTime: 0, placeInQueue: 1)
+                        }
+                        Global.isQueued = true
+                        Global.gBarberShop = self.barberShop
+                        self.tabBarController?.selectedIndex = 1
+                        self.navigationController?.popToRootViewController(animated: false)
+                    })
+               }
+        })
+    }
+    
+    func pushCustomerToQueue(shopKey: String, desiredBarberKey: String, maxWaitingTime: CLong , placeInQueue: Int) {
+        let customerKey = Global.gUser.id
+        
+        let timestamp = NSDate().timeIntervalSince1970
+        let curTime = String(format: "%.0f", timestamp)
+        let curtimeLong = CLong(curTime)
+        let queue: String = Global.Suit.queue.rawValue
+        
+        let customerToQueue = [
+            "absent": false,
+            "actualBarberID": desiredBarberKey,
+            "actualProcessingTime": 0,
+            "anyBarber": true,
+            "addedBy": customerKey,
+            "arrivalTime": curtimeLong!,
+            "departureTime": 0,
+            "dragAdjustedTime": 0,
+            "expectedWaitingTime": maxWaitingTime,
+            "key": customerKey,
+            "channel": "CUSTOMER_APP",
+            "lastPositionChangedTime": 0,
+            "placeInQueue": placeInQueue,
+            "serviceStartTime": 0,
+            "serviceTime": 0,
+            "status": queue,
+            "timeAdded": -1,
+            "customerId": Global.gUser.id,
+            "name": Global.gUser.name
+            ] as [String : Any]
+        
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "ddMMyyyy"
+        let curDate = formatter.string(from: date)
+        let childPath = Global.BARBER_WAITING_QUEUES + "/" + shopKey + "_" + curDate
+    Database.database().reference().child(childPath).child(desiredBarberKey).child(customerKey).setValue(customerToQueue)
     }
 
 }
 
 extension ServicesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return serviceNameArr.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ServiceTableViewCell", for: indexPath) as! ServiceTableViewCell
+        cell.initWithData(serviceName: serviceNameArr[indexPath.row], price: servicePriceArr[indexPath.row])
         return cell
     }
     

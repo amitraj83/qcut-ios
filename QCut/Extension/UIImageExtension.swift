@@ -10,16 +10,21 @@ import Foundation
 import UIKit
 
 extension UIImage {
+    
+    class func icAccount() -> UIImage {
+        return UIImage(named: "ic_account")!
+    }
+    
     class func icEmail() -> UIImage {
-        return UIImage(named: "ic_email")!
+        return UIImage(named: "mail_blasck")!
     }
     
     class func icLock() -> UIImage {
-        return UIImage(named: "ic_lock")!
+        return UIImage(named: "password_off")!
     }
     
     class func icUnlock() -> UIImage {
-        return UIImage(named: "ic_unlock")!
+        return UIImage(named: "password_on")!
     }
     
     class func icUserRed() -> UIImage {
