@@ -50,46 +50,43 @@ class SignUpVC: UIViewController {
             Global.onShowProgressView(name: "Connecting")
             Auth.auth().createUser(withEmail: emailMDCTxt.text!, password: passwordMDCTxt.text!, completion: {(user, error) in
                 if error != nil{
-                    Auth.auth().signIn(withEmail: self.emailMDCTxt.text!, password: self.passwordMDCTxt.text!, completion: {(usr, err) in
-                        if err != nil {
-                            Global.onhideProgressView()
-                            self.view.makeToast("Failed to register, please try again.")
-                        } else {
-                            Global.onhideProgressView()
-                            Database.database().reference().child("Customers").child((usr?.user.uid)!).observe(.value, with: {snapshot in
-                                let postDict = snapshot.value as? [String: AnyObject] ?? [:]
-                                Global.gUser.fromFirebase(data: postDict)
-                                UserDefaults.standard.set("Normal", forKey: "loginType")
-                                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                                let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
-                                self.navigationController?.pushViewController(vc, animated: true)
+                    self.view.makeToast("The email is already registered. Please use different email address.")
+                    Global.onhideProgressView()
+                } else {
+                    Global.onhideProgressView()
+                    Auth.auth().currentUser?.sendEmailVerification(completion: {(error) in
+                        if error == nil {
+                            self.view.makeToast("Registration Successful. Check your mail box for verification.")
+                            
+                            Global.gUser.id = Auth.auth().currentUser!.uid
+                            Global.gUser.email = self.emailMDCTxt.text!
+                            Global.gUser.name = self.nameMDCTxt.text!
+                            
+                            let params = [
+                                "id": Global.gUser.id,
+                                "email": Global.gUser.email,
+                                "name": Global.gUser.name
+                            ]
+                            
+                            FireManager.saveDataToFirebase(ref: FireManager.customerRef.child(Global.gUser.id), params: params as [String : AnyObject], success: {result in
+                                if result {
+                                    self.navigationController?.popViewController(animated: true)
+                                }
                             })
                         }
                     })
-                } else {
-                    Global.onhideProgressView()
-                    Global.gUser.id = (user?.user.uid)!
-                    Global.gUser.name = self.nameMDCTxt.text!
-                    Global.gUser.email = self.emailMDCTxt.text!
-                    Global.gUser.photo = ""
-                    
-                    var ref: DatabaseReference!
-                    ref = Database.database().reference()
-                    ref.child("Customers").child(Global.gUser.id).setValue(Global.gUser.toFirebaseData())
-                    UserDefaults.standard.set("Normal", forKey: "loginType")
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
-                    self.navigationController?.pushViewController(vc, animated: true)
                 }
             })
         }
     }
+    
     @IBAction func gotoSignIn(_ sender: Any) {
         self.navigationController?.popToRootViewController(animated: true)
     }
+    
     func initUIView(){
         signupAreaUIV.setShadowRadiusToUIView()
-        signUpBtnUIV.setShadowRadiusToUIView()
+        signUpBtnUIV.setShadowRadiusToUIView(radius: signUpBtnUIV.frame.height / 2)
         
         nameMDCController = MDCTextInputControllerOutlined(textInput: nameMDCTxt)
         nameMDCController?.setMDCTextInputOutline()

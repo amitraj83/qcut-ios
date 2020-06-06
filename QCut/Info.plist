@@ -26,7 +26,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb201807467696163</string>
-                <string>com.googleusercontent.apps.565564103314-kdgbmdam0i9p3nc60617l1l0ag5ku0hf</string>
+				<string>com.googleusercontent.apps.679003759994-a8p4nbsu9shuk1uae5642g08ehmbt0sm</string>
 			</array>
 		</dict>
 	</array>
@@ -36,6 +36,8 @@
 	<string>201807467696163</string>
 	<key>FacebookDisplayName</key>
 	<string>QCut</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -51,7 +53,7 @@
 		<string>fbapi20160328</string>
 		<string>fbauth</string>
 		<string>fbauth2</string>
-		<string>fbshareextension</string>        
+		<string>fbshareextension</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -65,6 +67,12 @@
 		<string>Montserrat-Medium.ttf</string>
 		<string>Montserrat-Bold.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -73,6 +81,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -84,5 +94,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

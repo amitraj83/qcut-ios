@@ -14,6 +14,4 @@
 
 #import "MDCInkGestureRecognizer.h"
 #import "MDCInkTouchController.h"
-#import "MDCInkTouchControllerDelegate.h"
 #import "MDCInkView.h"
-#import "MDCInkViewDelegate.h"

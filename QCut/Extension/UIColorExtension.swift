@@ -41,6 +41,10 @@ extension UIColor {
         return UIColor.hexStringToUIColor(hex: "#0081D6")
     }
     
+    class func secondaryBlue() -> UIColor {
+        return UIColor.hexStringToUIColor(hex: "#007AFF")
+    }
+    
     class func mainGreen() -> UIColor {
         return UIColor.hexStringToUIColor(hex: "#00C0A2")
     }

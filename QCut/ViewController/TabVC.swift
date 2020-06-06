@@ -11,19 +11,25 @@ import UIKit
 class TabVC: UITabBarController {
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()        
         selectedIndex = 0
         
         guard let tabBar = self.tabBarController?.tabBar else {return}
-        tabBar.tintColor = UIColor.white
-        tabBar.barTintColor = UIColor.mainGray()
-        tabBar.unselectedItemTintColor = UIColor.mainGray()
-        tabBar.backgroundColor = UIColor.mainGray()
+        
+        let numberOfItems = CGFloat(tabBar.items!.count)
+        let tabBarItemSize = CGSize(width: tabBar.frame.width / numberOfItems, height: tabBar.frame.height)
+        
+        tabBar.clipsToBounds = true
+        
+        tabBar.selectionIndicatorImage = UIImage.imageWithColor(color: UIColor.red, size: tabBarItemSize).resizableImage(withCapInsets: UIEdgeInsets.zero)
+
+        // remove default border
+        tabBar.frame.size.width = self.view.frame.width + 4
+        tabBar.frame.origin.x = -2
         
         
         // Do any additional setup after loading the view.
     }
-    
 
     /*
     // MARK: - Navigation

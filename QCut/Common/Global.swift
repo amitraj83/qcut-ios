@@ -19,6 +19,9 @@ class Global: NSObject {
     static let BARBER_WAITING_QUEUES: String = "barberWaitingQueues"
     static let BARBERS: String = "barbers"
     
+    static var lat = 0.0
+    static var lon = 0.0
+    
     enum Suit: String, CaseIterable { case queue = "QUEUE"; case progress = "PROGRESS"; case done = "DONE"; case removed = "REMOVED"        
     }
     

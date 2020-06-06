@@ -47,7 +47,7 @@ class LoginVC: UIViewController {
     func initUIView() {
         
         loginAreaUIV.setShadowRadiusToUIView()
-        signInButnUIV.setShadowRadiusToUIView()
+        signInButnUIV.setShadowRadiusToUIView(radius: signInButnUIV.frame.height / 2)
         
         emailMDCController = MDCTextInputControllerOutlined(textInput: mdcEmailTF)
         emailMDCController?.setMDCTextInputOutline()
@@ -109,14 +109,27 @@ class LoginVC: UIViewController {
                     self.view.makeToast("Account does not exist.")
                 } else {
                     Global.onhideProgressView()
-                    Database.database().reference().child("Customers").child((usr?.user.uid)!).observe(.value, with: {snapshot in
-                        let postDict = snapshot.value as? [String: AnyObject] ?? [:]
-                        Global.gUser.fromFirebase(data: postDict)
-                        UserDefaults.standard.set("Normal", forKey: "loginType")
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
-                        self.navigationController?.pushViewController(vc, animated: true)
-                    })
+                    if Auth.auth().currentUser!.isEmailVerified {
+                        let ref: DatabaseReference = FireManager.customerRef.child(Auth.auth().currentUser!.uid)
+                        FireManager.getDataToFirebase(ref: ref, success: {result in
+                            let object = result.value as! [String: AnyObject]
+                            Global.gUser.id = object["id"] as! String
+                            Global.gUser.email = object["email"] as! String
+                            Global.gUser.name = object["name"] as! String
+                            
+                            UserDefaultManager.setStringData(key: UserDefaultManager.LOGIN_TYPE, val: "normal")
+                            UserDefaultManager.setBoolData(key: UserDefaultManager.IS_LOGGEDIN, val: true)
+                            UserDefaultManager.setStringData(key: UserDefaultManager.USER_NAME, val: Global.gUser.name)
+                            UserDefaultManager.setStringData(key: UserDefaultManager.USER_EMAIL, val: Global.gUser.email)
+                            UserDefaultManager.setStringData(key: UserDefaultManager.USER_ID, val: Global.gUser.id)
+                            
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        })
+                    } else {
+                        self.view.makeToast("Check your mail box.")
+                    }
                 }
             })
         }
@@ -163,12 +176,8 @@ class LoginVC: UIViewController {
                                 } else {
                                     self.saveFBUSERInfo(result: result as! [String: Any], userID: (user?.user.uid)!)
                                 }
+                               
                             })
-                            Global.onhideProgressView()
-                            UserDefaults.standard.set("Facebook", forKey: "loginType")
-                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                            let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
-                            self.navigationController?.pushViewController(vc, animated: true)
                         }
                         
                     })
@@ -182,20 +191,51 @@ class LoginVC: UIViewController {
     }
     
     func getFBUserInfo(userId: String) {
-        Database.database().reference().child("Customers").child(userId).observe(.value, with: {snapshot in
+        FireManager.getDataToFirebase(ref: FireManager.customerRef.child(userId), success: {snapshot in
             let postDict = snapshot.value as? [String : AnyObject] ?? [:]
-            Global.gUser.fromFirebase(data: postDict)
+            Global.gUser.id = postDict["id"] as! String
+            Global.gUser.email = postDict["email"] as! String
+            Global.gUser.name = postDict["name"] as! String
+            Global.gUser.photo = postDict["photo"] as! String
+            
+            self.gotoNextScreen()
         })
     }
     
     func saveFBUSERInfo(result: [String: Any], userID: String) {
         Global.gUser.id = userID
         Global.gUser.email = result["email"] as! String
+        Global.gUser.name = result["name"] as! String
         
         if let picture = result["picture"] as? [String:Any] , let imgData = picture["data"] as? [String:Any] , let imgUrl = imgData["url"] as? String {
             Global.gUser.photo = imgUrl
         }
-        Database.database().reference().child("Customers").child(userID).setValue(Global.gUser.toFirebaseData())
+        
+        let params = [
+            "id": Global.gUser.id,
+            "email": Global.gUser.email,
+            "name": Global.gUser.name,
+            "photo": Global.gUser.photo
+        ] as [String : Any]
+        
+        FireManager.saveDataToFirebase(ref: FireManager.customerRef.child(Global.gUser.id), params: params as [String : AnyObject], success: {result in
+            self.gotoNextScreen()
+        })
+    }
+    
+    func gotoNextScreen() {
+        UserDefaultManager.setStringData(key: UserDefaultManager.LOGIN_TYPE, val: "facebook")
+       UserDefaultManager.setBoolData(key: UserDefaultManager.IS_LOGGEDIN, val: true)
+       UserDefaultManager.setStringData(key: UserDefaultManager.USER_NAME, val: Global.gUser.name)
+       UserDefaultManager.setStringData(key: UserDefaultManager.USER_EMAIL, val: Global.gUser.email)
+       UserDefaultManager.setStringData(key: UserDefaultManager.USER_ID, val: Global.gUser.id)
+       
+       
+       Global.onhideProgressView()
+       
+       let storyboard = UIStoryboard(name: "Main", bundle: nil)
+       let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
+       self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -218,18 +258,35 @@ extension LoginVC: GIDSignInDelegate {
                 
                 Global.gUser.id = (authResult?.user.uid)!
                 Global.gUser.email = user.profile.email
+                Global.gUser.googleID = user.authentication.clientID
+                Global.gUser.name = user.profile.name
                 if user.profile.hasImage {
                     Global.gUser.photo = (user.profile.imageURL(withDimension: 200))!.absoluteString
                 } else {
                     Global.gUser.photo = ""
                 }
-                var ref: DatabaseReference!
-                ref = Database.database().reference()
-                ref.child("Customers").child(Global.gUser.id).setValue(Global.gUser.toFirebaseData())
-                UserDefaults.standard.set("Google", forKey: "loginType")
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
-                self.navigationController?.pushViewController(vc, animated: true)
+                
+                let params = [
+                    "id": Global.gUser.id,
+                    "email": Global.gUser.email,
+                    "name": Global.gUser.name,
+                    "googleID": Global.gUser.googleID,
+                    "photo": Global.gUser.photo,
+                    "registeredInApp": false
+                    ] as [String : Any]
+                
+                FireManager.saveDataToFirebase(ref: FireManager.customerRef.child(Global.gUser.id), params: params as [String : AnyObject], success: {result in
+                    if result {
+                        UserDefaultManager.setStringData(key: UserDefaultManager.LOGIN_TYPE, val: "google")
+                        UserDefaultManager.setBoolData(key: UserDefaultManager.IS_LOGGEDIN, val: true)
+                        UserDefaultManager.setStringData(key: UserDefaultManager.USER_NAME, val: Global.gUser.name)
+                        UserDefaultManager.setStringData(key: UserDefaultManager.USER_EMAIL, val: Global.gUser.email)
+                        UserDefaultManager.setStringData(key: UserDefaultManager.USER_ID, val: Global.gUser.id)
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                })
             })
         }
     }

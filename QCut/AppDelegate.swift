@@ -13,9 +13,11 @@ import FBSDKCoreKit
 import GoogleSignIn
 import FirebaseAuth
 import FacebookLogin
+import CoreLocation
+import FirebaseMessaging
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
     var window: UIWindow?
 
@@ -24,13 +26,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Thread.sleep(forTimeInterval: 1.0)
         IQKeyboardManager.shared().isEnabled = true
         
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+            // For iOS 10 data message (sent via FCM)
+            Messaging.messaging().delegate = self
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            UIApplication.shared.registerUserNotificationSettings(settings)
+        }
+        UIApplication.shared.registerForRemoteNotifications()
+        
         FirebaseApp.configure()
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
+        let navigationController = UINavigationController(rootViewController: newViewController)
+        navigationController.navigationBar.isHidden = true
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        appdelegate.window!.rootViewController = navigationController
+        
+//        let pushManager = PushNotificationManager(userID: UIDevice.current.identifierForVendor!.uuidString)
+//
+//        pushManager.registerForPushNotifications()
+        
         return true
     }
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -42,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         try! Auth.auth().signOut()
         if UserDefaults.standard.string(forKey: "loginType") == "Google" {
             GIDSignIn.sharedInstance()?.signOut()
-        } 
+        }
         UserDefaults.standard.removeObject(forKey: "loginType")
         
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
@@ -74,5 +104,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("handle",handled)
         return handled
     }
+
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+        print(remoteMessage.appData)
+    }
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        
+    }
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print(response)
+    }
 }
+
 

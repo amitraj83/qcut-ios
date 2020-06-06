@@ -28,18 +28,28 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="£ 14.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SFN-qQ-D8Q">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="£ 14.00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SFN-qQ-D8Q">
                         <rect key="frame" x="248" y="21" width="52" height="18.5"/>
                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ELe-rm-eQF">
+                        <rect key="frame" x="20" y="59" width="280" height="1"/>
+                        <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="h3r-2B-yLi"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="SFN-qQ-D8Q" secondAttribute="trailing" constant="20" id="0Tp-Y6-tMc"/>
+                    <constraint firstAttribute="bottom" secondItem="ELe-rm-eQF" secondAttribute="bottom" id="C3f-Bu-jz2"/>
                     <constraint firstItem="ffc-BU-NWA" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Ri4-og-yjR"/>
+                    <constraint firstItem="ELe-rm-eQF" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Wiu-AE-fjL"/>
                     <constraint firstItem="SFN-qQ-D8Q" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="b8X-3y-fpV"/>
+                    <constraint firstItem="ELe-rm-eQF" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="o70-xt-0GO"/>
                     <constraint firstItem="ffc-BU-NWA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="p3g-Tg-KVM"/>
                 </constraints>
             </tableViewCellContentView>
@@ -49,7 +59,7 @@
                 <outlet property="nameUL" destination="ffc-BU-NWA" id="sFp-hv-01p"/>
                 <outlet property="priceUL" destination="SFN-qQ-D8Q" id="x5M-26-wfF"/>
             </connections>
-            <point key="canvasLocation" x="133" y="154"/>
+            <point key="canvasLocation" x="131.8840579710145" y="153.34821428571428"/>
         </tableViewCell>
     </objects>
 </document>

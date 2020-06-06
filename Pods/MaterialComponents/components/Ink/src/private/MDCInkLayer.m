@@ -13,8 +13,6 @@
 // limitations under the License.
 
 #import "MDCInkLayer.h"
-
-#import "MDCInkLayerDelegate.h"
 #import "MaterialMath.h"
 
 static const CGFloat MDCInkLayerCommonDuration = (CGFloat)0.083;

@@ -9,8 +9,12 @@
 import UIKit
 import CoreLocation
 
-class BarbershopCell: UITableViewCell {
+protocol BarberShopCellDelegate {
+    func onTapCell(barberShop: BarberShop)
+}
 
+class BarbershopCell: UITableViewCell {
+    
     @IBOutlet weak var shopName: UILabel!
     @IBOutlet weak var street1UL: UILabel!
     @IBOutlet weak var street2UL: UILabel!
@@ -20,38 +24,47 @@ class BarbershopCell: UITableViewCell {
     @IBOutlet weak var favouriteUL: UILabel!
     @IBOutlet weak var distabceUL: UILabel!
     @IBOutlet weak var containerUV: UIView!
+    @IBOutlet weak var statusUIMG: UIImageView!
+    
+    var barberShop: BarberShop = BarberShop()
+    var delegate: BarberShopCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         
-        favouriteUV.layer.cornerRadius = 16.0
-        favouriteUV.layer.borderColor = UIColor.systemYellow.cgColor
-        favouriteUV.layer.borderWidth = 2.0
+        favouriteUV.layer.cornerRadius = favouriteUV.frame.height / 2
         
-        contentView.setShadowRadiusToUIView()
+        containerUV.setShadowRadiusToUIView()
+        
+        let tapContainer = UITapGestureRecognizer(target: self, action: #selector(onTapContainerUV))
+        containerUV.addGestureRecognizer(tapContainer)
     }
-
+    
+    @objc func onTapContainerUV() {
+        self.delegate?.onTapCell(barberShop: barberShop)
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     
-    func initWithData(barber: BarberShop, myLocation: CLLocation) {
+    func initWithData(barber: BarberShop) {
+        self.barberShop = barber
         
         shopName.text = barber.shopName
         street1UL.text = barber.street1
         street2UL.text = barber.street2 + ", " + barber.city
-        let maplink = barber.gMapLink
-        let lat = maplink.components(separatedBy: ",")[0]
-        let lon = maplink.components(separatedBy: ",")[1]
         
-//        let myLocation = CLLocation(latitude: 53.393532, longitude: -6.385874)
-        let barberLocation = CLLocation(latitude: Double(lat) as! CLLocationDegrees, longitude: Double(lon)!)
-        let distance = myLocation.distance(from: barberLocation)
-        let strDistance = String(format: "%.1f", distance / 1000)
-        distabceUL.text = strDistance + "Km"
+        distabceUL.text = String(format: "%.1f", barber.distance / 1000) + " Km"
+        
+        if barber.status == "OFFLINE" {
+            statusUIMG.image = UIImage(named: "ic_offline")
+        } else if barber.status == "ONLINE" {
+            statusUIMG.image = UIImage(named: "ic_online")
+        }
     }
     
 }

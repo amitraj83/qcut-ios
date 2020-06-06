@@ -18,6 +18,7 @@ class ProfileEditVC: UIViewController {
     @IBOutlet weak var mdcNewPwdTF: MDCTextField!
     @IBOutlet weak var locationPV: UIPickerView!
     @IBOutlet weak var saveUB: UIButton!
+    @IBOutlet weak var cancelUB: UIButton!
     
     var type: Int = Int()
     var nameMDCController: MDCTextInputControllerOutlined?
@@ -37,11 +38,7 @@ class ProfileEditVC: UIViewController {
         
         // Do any additional setup after loading the view.
         saveUB.setShadowRadiusToUIView(radius: 10.0)
-        saveUB.layer.borderColor = UIColor.mainGreen().cgColor
-        saveUB.layer.borderWidth = 3.0
-        saveUB.setTitleColor(UIColor.mainGreen(), for: .normal)
-        print("\(type)")
-        
+        cancelUB.setShadowRadiusToUIView(radius: 10.0)
         initUIView()
     }
     
@@ -136,12 +133,15 @@ class ProfileEditVC: UIViewController {
             
             break
         case 2:
-            Global.gUser.location = locationName
-        Database.database().reference().child("Customers").child(Global.gUser.id).setValue(Global.gUser.toFirebaseData())
+//            Global.gUser.location = locationName
+//        Database.database().reference().child("Customers").child(Global.gUser.id).setValue(Global.gUser.toFirebaseData())
             break
         default:
             break
         }
+        self.dismiss(animated: true, completion: nil)
+    }
+    @IBAction func onClickCancelUB(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
 }

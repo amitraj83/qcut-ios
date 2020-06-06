@@ -26,6 +26,7 @@ class QueueVC: UIViewController {
     @IBOutlet weak var dearLB: UILabel!
     @IBOutlet weak var waitingLB: UILabel!
     @IBOutlet weak var topUV: UIView!
+    @IBOutlet weak var selectBarberUB: UIButton!
     
     var barberShop: BarberShop = BarberShop()
     
@@ -51,42 +52,37 @@ class QueueVC: UIViewController {
     }
     */
     func initUIView(){
+        dearLB.text = UserDefaultManager.getStringData(key: UserDefaultManager.USER_NAME)
+        
         scheduleTimeLB.textColor = UIColor.mainGreen()
+        selectBarberUB.setShadowRadiusToUIView(radius: 20.0)
+        
+        //Here we should attach firebase listener and retrieve the latest waiting time.
+        
+        
         
         var timeString: String = ""
         if(Global.waitingTime == 0){
             timeString = "Ready"
         }else{
-            let hrs = Global.waitingTime / 3600
-            let min = Global.waitingTime / 60
-            let sec = Global.waitingTime % 60
+            let hrs = Global.waitingTime / 60
+            let min = Global.waitingTime % 60
             
             var hrsString = ""
             var minString = ""
-            var secString = ""
             
             if(hrs <= 0){
                 hrsString = ""
+                minString = String(min) + " min "
             }else if(hrs > 0){
-                hrsString = String(hrs) + " h "
-            }
-            
-            if(min <= 0){
-                minString = ""
-            }else if(min > 0){
+                hrsString = String(hrs) + " hr "
                 minString = String(min) + " min "
             }
             
-            if(sec <= 0){
-                secString = ""
-            }else if(sec > 0){
-                secString = String(sec) + " sec "
-            }
-            timeString = hrsString + minString + secString
+            timeString = hrsString + minString
         }
         
         scheduleTimeLB.text = timeString
-//        scheduleTimeUV.roundCorners(corners: [.allCorners], radius: scheduleTimeUV.frame.height / 2)
         scheduleTimeUV.setShadowRadiusToUIView(radius: scheduleTimeUV.frame.height / 2)
         scheduleTimeUV.layer.borderColor = UIColor.mainGreen().cgColor
         scheduleTimeUV.layer.borderWidth = 2.0
@@ -115,10 +111,13 @@ class QueueVC: UIViewController {
             unqueUV.isHidden = false
         }
     }
+    @IBAction func onTapSelectBarber(_ sender: Any) {
+        self.tabBarController?.selectedIndex = 0
+    }
     
     @objc func onTapLeaveUB() {
         
-        let customerId = Global.gUser.id
+        let customerId = UserDefaultManager.getStringData(key: UserDefaultManager.USER_ID)
         Global.onhideProgressView()
      
         let date = Date()

@@ -14,15 +14,14 @@
 
 #import "MDCMultilineTextField.h"
 
-#import "private/MDCTextInputCommonFundament.h"
 #import "MDCIntrinsicHeightTextView.h"
-#import "MDCMultilineTextInputLayoutDelegate.h"
 #import "MDCTextField.h"
 #import "MDCTextFieldPositioningDelegate.h"
 #import "MDCTextInputBorderView.h"
 #import "MDCTextInputCharacterCounter.h"
 #import "MDCTextInputController.h"
 #import "MDCTextInputUnderlineView.h"
+#import "private/MDCTextInputCommonFundament.h"
 
 #import "MaterialMath.h"
 #import "MaterialTypography.h"
@@ -31,8 +30,6 @@
 static NSString *const kClearButtonKey = @"MaterialTextFieldClearButtonAccessibilityLabel";
 /** Table name within the bundle used for localizing accessibility values. */
 static NSString *const kAccessibilityLocalizationStringsTableName = @"MaterialTextField";
-// The Bundle for string resources.
-static NSString *const kBundle = @"MaterialTextFields.bundle";
 
 @interface MDCMultilineTextField () {
   UIColor *_cursorColor;
@@ -101,6 +98,10 @@ static NSString *const kBundle = @"MaterialTextFields.bundle";
   return self;
 }
 
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)copyWithZone:(__unused NSZone *)zone {
   MDCMultilineTextField *copy = [[[self class] alloc] initWithFrame:self.frame];
 
@@ -131,7 +132,7 @@ static NSString *const kBundle = @"MaterialTextFields.bundle";
   // TODO: (#4331) This needs to be converted to the new text scheme.
   self.font = [UIFont mdc_standardFontForMaterialTextStyle:MDCFontTextStyleBody1];
   self.clearButton.tintColor = [UIColor colorWithWhite:0 alpha:[MDCTypography captionFontOpacity]];
-  NSBundle *bundle = [[self class] bundle];
+  NSBundle *bundle = [NSBundle bundleForClass:[MDCMultilineTextField class]];
   NSString *accessibilityLabel =
       [bundle localizedStringForKey:kClearButtonKey
                               value:@"Clear text"
@@ -830,24 +831,6 @@ static NSString *const kBundle = @"MaterialTextFields.bundle";
   }
 
   [_fundament mdc_setAdjustsFontForContentSizeCategory:adjusts];
-}
-
-#pragma mark - Resource Bundle
-
-+ (NSBundle *)bundle {
-  static NSBundle *bundle = nil;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    bundle = [NSBundle bundleWithPath:[self bundlePathWithName:kBundle]];
-  });
-
-  return bundle;
-}
-
-+ (NSString *)bundlePathWithName:(NSString *)bundleName {
-  NSBundle *bundle = [NSBundle bundleForClass:[MDCMultilineTextField class]];
-  NSString *resourcePath = [(nil == bundle ? [NSBundle mainBundle] : bundle) resourcePath];
-  return [resourcePath stringByAppendingPathComponent:bundleName];
 }
 
 @end

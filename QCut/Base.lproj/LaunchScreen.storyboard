@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,6 +17,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dE7-qe-e4l">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                <color key="backgroundColor" name="colorMainStatus"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="hpn-aw-wAF"/>
+                                </constraints>
+                            </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_logo-1" translatesAutoresizingMaskIntoConstraints="NO" id="wVA-Fu-Tfx">
                                 <rect key="frame" x="40" y="286" width="334" height="334"/>
                                 <constraints>
@@ -26,9 +34,12 @@
                         <color key="backgroundColor" red="1" green="0.89870870113372803" blue="0.091150619089603424" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wVA-Fu-Tfx" secondAttribute="trailing" constant="40" id="1Of-A6-4s1"/>
+                            <constraint firstItem="dE7-qe-e4l" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="2H4-Cv-gB9"/>
                             <constraint firstItem="wVA-Fu-Tfx" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="4Uo-bL-mwG"/>
                             <constraint firstItem="wVA-Fu-Tfx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="L9O-fj-XAv"/>
+                            <constraint firstItem="dE7-qe-e4l" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="ZWL-55-PAA"/>
                             <constraint firstItem="wVA-Fu-Tfx" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="l76-ti-nnv"/>
+                            <constraint firstItem="dE7-qe-e4l" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="qOe-Bd-OEd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -40,5 +51,8 @@
     </scenes>
     <resources>
         <image name="ic_logo-1" width="90" height="86"/>
+        <namedColor name="colorMainStatus">
+            <color red="0.035294117647058823" green="0.22745098039215686" blue="0.058823529411764705" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

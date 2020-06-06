@@ -15,8 +15,6 @@
 #import "MDCRippleView.h"
 #import "private/MDCRippleLayer.h"
 
-#import "MaterialAvailability.h"
-#import "MDCRippleViewDelegate.h"
 #import "MaterialMath.h"
 
 @interface MDCRippleView () <CALayerDelegate, MDCRippleLayerDelegate>
@@ -189,27 +187,23 @@ static const CGFloat kRippleFadeOutDelay = (CGFloat)0.15;
   self.activeRippleColor = self.rippleColor;
 }
 
-- (void)setColorForRippleLayer:(MDCRippleLayer *)rippleLayer {
-#if MDC_AVAILABLE_SDK_IOS(13_0)
-  if (@available(iOS 13.0, *)) {
-    if ([self.traitCollection respondsToSelector:@selector(performAsCurrentTraitCollection:)]) {
-      [self.traitCollection performAsCurrentTraitCollection:^{
-        rippleLayer.fillColor = self.rippleColor.CGColor;
-      }];
-      return;
-    }
-  }
-#endif  // MDC_AVAILABLE_SDK_IOS(13_0)
-  rippleLayer.fillColor = self.rippleColor.CGColor;
-}
-
 - (void)beginRippleTouchDownAtPoint:(CGPoint)point
                            animated:(BOOL)animated
                          completion:(nullable MDCRippleCompletionBlock)completion {
   MDCRippleLayer *rippleLayer = [MDCRippleLayer layer];
   rippleLayer.rippleLayerDelegate = self;
   [self updateRippleStyle];
-  [self setColorForRippleLayer:rippleLayer];
+#if defined(__IPHONE_13_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_13_0)
+  if (@available(iOS 13.0, *)) {
+    [self.traitCollection performAsCurrentTraitCollection:^{
+      rippleLayer.fillColor = self.rippleColor.CGColor;
+    }];
+  } else {
+    rippleLayer.fillColor = self.rippleColor.CGColor;
+  }
+#else
+  rippleLayer.fillColor = self.rippleColor.CGColor;
+#endif
   rippleLayer.frame = self.bounds;
   if (self.rippleStyle == MDCRippleStyleUnbounded) {
     rippleLayer.maximumRadius = self.maximumRadius;

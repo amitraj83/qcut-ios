@@ -31,7 +31,7 @@
 
 #pragma mark - Constants
 
-static const CGFloat MDCTextInputControllerBaseDefaultBorderRadius = 4;
+const CGFloat MDCTextInputControllerBaseDefaultBorderRadius = 4;
 static const CGFloat MDCTextInputControllerBaseDefaultFloatingPlaceholderScaleDefault =
     (CGFloat)0.75;
 static const CGFloat MDCTextInputControllerBaseDefaultHintTextOpacity = (CGFloat)0.54;
@@ -188,7 +188,6 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
 
   copy.activeColor = self.activeColor;
   copy.borderFillColor = self.borderFillColor;
-  copy.borderRadius = self.borderRadius;
   copy.borderStrokeColor = self.borderStrokeColor;
   copy.characterCounter = self.characterCounter;  // Just a pointer value copy
   copy.characterCountViewMode = self.characterCountViewMode;
@@ -228,7 +227,6 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
 
 - (void)commonMDCTextInputControllerBaseInitialization {
   _roundedCorners = [self class].roundedCornersDefault;
-  _borderRadius = MDCTextInputControllerBaseDefaultBorderRadius;
   _characterCountViewMode = UITextFieldViewModeAlways;
   _disabledColor = [self class].disabledColorDefault;
   _expandsOnOverflow = YES;
@@ -342,14 +340,11 @@ static UITextFieldViewMode _underlineViewModeDefault = UITextFieldViewModeWhileE
 - (UIBezierPath *)defaultBorderPath {
   CGRect borderBound = self.textInput.bounds;
   borderBound.size.height = CGRectGetMaxY(self.textInput.underline.frame);
-  return [UIBezierPath bezierPathWithRoundedRect:borderBound
-                               byRoundingCorners:self.roundedCorners
-                                     cornerRadii:CGSizeMake(self.borderRadius, self.borderRadius)];
-}
-
-- (void)setBorderRadius:(CGFloat)borderRadius {
-  _borderRadius = borderRadius;
-  [self updateLayout];
+  return [UIBezierPath
+      bezierPathWithRoundedRect:borderBound
+              byRoundingCorners:self.roundedCorners
+                    cornerRadii:CGSizeMake(MDCTextInputControllerBaseDefaultBorderRadius,
+                                           MDCTextInputControllerBaseDefaultBorderRadius)];
 }
 
 #pragma mark - Character Max Implementation

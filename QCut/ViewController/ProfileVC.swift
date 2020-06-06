@@ -16,11 +16,8 @@ class ProfileVC: UIViewController {
     @IBOutlet weak var avatarUIMG: UIImageView!
     @IBOutlet weak var cameraUIMG: UIImageView!
     @IBOutlet weak var nameLB: UILabel!
-    @IBOutlet weak var nameEditUIMG: UIImageView!
     @IBOutlet weak var emailLB: UILabel!
-    @IBOutlet weak var passwordEditUIMG: UIImageView!
     @IBOutlet weak var locationLB: UILabel!
-    @IBOutlet weak var locationEditUIMG: UIImageView!
         
     @IBOutlet weak var logoutUIV: UIView!
     var location = String()
@@ -30,8 +27,17 @@ class ProfileVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if UserDefaultManager.getBoolData(key: UserDefaultManager.IS_LOGGEDIN) {
+            initUIView()
+        } else {
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            let newViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+            let navigationController = UINavigationController(rootViewController: newViewController)
+            navigationController.navigationBar.isHidden = true
+            let appdelegate = UIApplication.shared.delegate as! AppDelegate
+            appdelegate.window!.rootViewController = navigationController
+        }
         
-        initUIView()
     }
 
     /*
@@ -48,21 +54,8 @@ class ProfileVC: UIViewController {
         
         avatarUIMG.roundCorners(corners: [.allCorners], radius: avatarUIMG.frame.height / 2)
         
-        let tapName = UITapGestureRecognizer(target: self, action: #selector(onTapNamePen))
-        nameEditUIMG.addGestureRecognizer(tapName)
-        nameEditUIMG.isHidden = true
-        
-        nameLB.text = Global.gUser.name
-        emailLB.text = Global.gUser.email
-        locationLB.text = Global.gUser.location
-        
-        let tapPassword = UITapGestureRecognizer(target: self, action: #selector(onTapPasswrodPen))
-        passwordEditUIMG.addGestureRecognizer(tapPassword)
-        passwordEditUIMG.isHidden = true
-        
-        let tapLocation = UITapGestureRecognizer(target: self, action: #selector(onTapLocationPen))
-        locationEditUIMG.addGestureRecognizer(tapLocation)
-        locationLB.text = Global.gUser.location
+        nameLB.text = UserDefaultManager.getStringData(key: UserDefaultManager.USER_NAME)
+        emailLB.text = UserDefaultManager.getStringData(key: UserDefaultManager.USER_EMAIL)
         
         let tapLogout = UITapGestureRecognizer(target: self, action: #selector(onTapLogout))
         logoutUIV.setShadowRadiusToUIView()
@@ -73,12 +66,16 @@ class ProfileVC: UIViewController {
     
     @objc func onTapLogout() {
         try! Auth.auth().signOut()
-        self.navigationController?.popToRootViewController(animated: true)
-        
-//        if let storyboard = self.storyboard {
-//            let vc = storyboard.instantiateViewController(withIdentifier: "SearchVC") as! UINavigationController
-//            self.present(vc, animated: false, completion: nil)
-//            }
+        UserDefaultManager.setBoolData(key: UserDefaultManager.IS_LOGGEDIN, val: false)
+        UserDefaultManager.removeData(key: UserDefaultManager.USER_NAME)
+        UserDefaultManager.removeData(key: UserDefaultManager.USER_EMAIL)
+        UserDefaultManager.removeData(key: UserDefaultManager.USER_ID)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyboard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+        let navigationController = UINavigationController(rootViewController: newViewController)
+        navigationController.navigationBar.isHidden = true
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        appdelegate.window!.rootViewController = navigationController
     }
     
     @objc func onTapNamePen() {
@@ -90,6 +87,9 @@ class ProfileVC: UIViewController {
     }
     
     @objc func onTapLocationPen() {
+        self.onShowEditVC(type: 2)
+    }
+    @IBAction func onTapLocationEdit(_ sender: Any) {
         self.onShowEditVC(type: 2)
     }
     

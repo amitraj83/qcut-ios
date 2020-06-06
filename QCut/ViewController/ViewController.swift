@@ -22,30 +22,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var distanceUL: UILabel!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var segmentUV: UIView!
+    @IBOutlet weak var statusUIMG: UIImageView!
     
     var titleView: IMSegmentTitleView?
     var pageView: IMPageContentView?
-    
-    let locationManager = CLLocationManager()
-    var lat = 0.0
-    var lon = 0.0
-    
     var barberShop: BarberShop = BarberShop()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-//        self.tabBarController.show
+        
         topView.setShadowRadiusToUIView()
         self.view.bringSubviewToFront(topView)
-        
-        self.locationManager.requestAlwaysAuthorization()
-        self.locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.startUpdatingLocation()
-        }
         
         initUIView()
     }
@@ -68,30 +55,25 @@ class ViewController: UIViewController {
         let titles = ["SERVICES", "HOURS", "DETAILS"]
         let titleFrame = CGRect(x: 0.0, y: 0.0, width: view.frame.width, height: 45.0)
         titleView = IMSegmentTitleView(frame: titleFrame, titles: titles, property: property)
-        titleView!.backgroundColor = UIColor(named: "colorMainBack")
+        titleView!.backgroundColor = .white
         titleView!.delegate = self
         segmentUV.addSubview(titleView!)
         
         shopName.text = barberShop.shopName
         street1.text = barberShop.street1
         street2.text = barberShop.street2 + ", " + barberShop.city
+    
+        distanceUL.text = String(format: "%.1f", barberShop.distance / 1000) + " Km"
         
-        let maplink = barberShop.gMapLink
-        let lat = maplink.components(separatedBy: ",")[0]
-        let lon = maplink.components(separatedBy: ",")[1]
-                
-        //        let myLocation = CLLocation(latitude: 53.393532, longitude: -6.385874)
-        let barberLocation = CLLocation(latitude: Double(lat) as! CLLocationDegrees, longitude: Double(lon)!)
-        let myLocation = CLLocation(latitude: self.lat, longitude: self.lon)
-        let distance = myLocation.distance(from: barberLocation)
-        let strDistance = String(format: "%.1f", distance / 1000)
-        distanceUL.text = strDistance + "Km"
+        statusUIMG.image = barberShop.status == "ONLINE" ? UIImage(named: "ic_online") : UIImage(named: "ic_offline")
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc1 = storyboard.instantiateViewController(withIdentifier: "ServicesViewController") as! ServicesViewController
         vc1.barberShop = barberShop
         let vc2 = storyboard.instantiateViewController(withIdentifier: "QueueViewController") as! QueueViewController
+        vc2.barberShop = barberShop
         let vc3 = storyboard.instantiateViewController(withIdentifier: "DetailsViewController") as! DetailsViewController
+        vc3.barberShop = barberShop
         
         let childVCs: [UIViewController] = [vc1, vc2, vc3] // viewControllers
         let contentFrame = CGRect(x: 0.0, y: 45.0, width: segmentUV.bounds.size.width, height: segmentUV.bounds.size.height - 45.0)
@@ -135,15 +117,5 @@ extension ViewController: IMSegmentTitleViewDelegate {
         pageView?.contentViewCurrentIndex = endIndex
     }
     
-}
-
-extension ViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-        self.lat = locValue.latitude
-        self.lon = locValue.longitude
-    }
-
 }
 

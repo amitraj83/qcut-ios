@@ -14,8 +14,6 @@
 
 #import "MDCRippleTouchController.h"
 
-#import "MDCRippleTouchControllerDelegate.h"
-
 @implementation MDCRippleTouchController {
   BOOL _tapWentOutsideOfBounds;
   BOOL _deferred;

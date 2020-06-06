@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3CC9EE752471C264009E1FDE /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC9EE742471C264009E1FDE /* SignUpVC.swift */; };
+		4524C49A247524F2008BDD08 /* FireManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4524C499247524F2008BDD08 /* FireManager.swift */; };
+		4524C49C24752511008BDD08 /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4524C49B24752511008BDD08 /* UserDefaultManager.swift */; };
 		45859272241B0E0300C12B54 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45859271241B0E0300C12B54 /* ViewController.swift */; };
 		45859276241B0EA700C12B54 /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45859273241B0EA600C12B54 /* ServicesViewController.swift */; };
 		45859277241B0EA700C12B54 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45859274241B0EA700C12B54 /* DetailsViewController.swift */; };
@@ -20,7 +22,6 @@
 		45AFFD302418D3AC00E94F53 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45AFFD2E2418D3AC00E94F53 /* Main.storyboard */; };
 		45AFFD322418D3B400E94F53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45AFFD312418D3B400E94F53 /* Assets.xcassets */; };
 		45AFFD352418D3B400E94F53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45AFFD332418D3B400E94F53 /* LaunchScreen.storyboard */; };
-		45AFFD3D2418D5CE00E94F53 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 45AFFD3C2418D5CE00E94F53 /* GoogleService-Info.plist */; };
 		45AFFD462418F2E200E94F53 /* TextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFFD442418F2E200E94F53 /* TextFieldExtension.swift */; };
 		45AFFD472418F2E200E94F53 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFFD452418F2E200E94F53 /* UIViewExtension.swift */; };
 		45AFFD492418F2FA00E94F53 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFFD482418F2FA00E94F53 /* UIColorExtension.swift */; };
@@ -35,6 +36,8 @@
 		45AFFD5F241A0E8B00E94F53 /* BarbershopCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45AFFD5D241A0E8B00E94F53 /* BarbershopCell.xib */; };
 		45AFFD62241A1EE900E94F53 /* BarberShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFFD61241A1EE900E94F53 /* BarberShop.swift */; };
 		45AFFD64241A33C400E94F53 /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AFFD63241A33C400E94F53 /* ProfileEditVC.swift */; };
+		45D514142479018000652A54 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D514132479018000652A54 /* PushNotificationManager.swift */; };
+		45D51416247904B100652A54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 45D51415247904B100652A54 /* GoogleService-Info.plist */; };
 		6E9F0C42DB759B9227623744 /* Pods_QCut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35035E199C9000584B799367 /* Pods_QCut.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +46,8 @@
 		35035E199C9000584B799367 /* Pods_QCut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QCut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CC9EE742471C264009E1FDE /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		3CEC19F9246704E2003AB372 /* QCut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QCut.entitlements; sourceTree = "<group>"; };
+		4524C499247524F2008BDD08 /* FireManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireManager.swift; sourceTree = "<group>"; };
+		4524C49B24752511008BDD08 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		45859271241B0E0300C12B54 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		45859273241B0EA600C12B54 /* ServicesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicesViewController.swift; sourceTree = "<group>"; };
 		45859274241B0EA700C12B54 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -57,7 +62,6 @@
 		45AFFD312418D3B400E94F53 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		45AFFD342418D3B400E94F53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		45AFFD362418D3B400E94F53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		45AFFD3C2418D5CE00E94F53 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		45AFFD402418DB0600E94F53 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.ttf"; sourceTree = "<group>"; };
 		45AFFD412418DB0600E94F53 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		45AFFD422418DB0600E94F53 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
@@ -75,6 +79,8 @@
 		45AFFD5D241A0E8B00E94F53 /* BarbershopCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BarbershopCell.xib; sourceTree = "<group>"; };
 		45AFFD61241A1EE900E94F53 /* BarberShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarberShop.swift; sourceTree = "<group>"; };
 		45AFFD63241A33C400E94F53 /* ProfileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
+		45D514132479018000652A54 /* PushNotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationManager.swift; sourceTree = "<group>"; };
+		45D51415247904B100652A54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BD096FC1A05CDA1F67C3D3FA /* Pods-QCut.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QCut.debug.xcconfig"; path = "Target Support Files/Pods-QCut/Pods-QCut.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +96,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4524C498247524CE008BDD08 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				4524C499247524F2008BDD08 /* FireManager.swift */,
+				4524C49B24752511008BDD08 /* UserDefaultManager.swift */,
+				45D514132479018000652A54 /* PushNotificationManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		45AFFD1C2418D3AC00E94F53 = {
 			isa = PBXGroup;
 			children = (
@@ -112,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				3CEC19F9246704E2003AB372 /* QCut.entitlements */,
+				4524C498247524CE008BDD08 /* Manager */,
 				45AFFD432418DB1D00E94F53 /* Extension */,
 				45AFFD3F2418DAC900E94F53 /* Font */,
 				45AFFD512419671700E94F53 /* Common */,
@@ -122,8 +139,8 @@
 				45AFFD2E2418D3AC00E94F53 /* Main.storyboard */,
 				45AFFD312418D3B400E94F53 /* Assets.xcassets */,
 				45AFFD332418D3B400E94F53 /* LaunchScreen.storyboard */,
+				45D51415247904B100652A54 /* GoogleService-Info.plist */,
 				45AFFD362418D3B400E94F53 /* Info.plist */,
-				45AFFD3C2418D5CE00E94F53 /* GoogleService-Info.plist */,
 			);
 			path = QCut;
 			sourceTree = "<group>";
@@ -275,11 +292,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				45AFFD352418D3B400E94F53 /* LaunchScreen.storyboard in Resources */,
-				45AFFD3D2418D5CE00E94F53 /* GoogleService-Info.plist in Resources */,
 				45AFFD322418D3B400E94F53 /* Assets.xcassets in Resources */,
 				4585927C241B0FC200C12B54 /* ServiceTableViewCell.xib in Resources */,
 				45AFFD5F241A0E8B00E94F53 /* BarbershopCell.xib in Resources */,
 				45AFFD302418D3AC00E94F53 /* Main.storyboard in Resources */,
+				45D51416247904B100652A54 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +368,7 @@
 			files = (
 				45859278241B0EA700C12B54 /* QueueViewController.swift in Sources */,
 				45AFFD5B24197EA200E94F53 /* ProfileVC.swift in Sources */,
+				45D514142479018000652A54 /* PushNotificationManager.swift in Sources */,
 				45AFFD62241A1EE900E94F53 /* BarberShop.swift in Sources */,
 				45AFFD552419790800E94F53 /* TabVC.swift in Sources */,
 				45AFFD532419672A00E94F53 /* Global.swift in Sources */,
@@ -367,7 +385,9 @@
 				45AFFD5724197E7400E94F53 /* SearchVC.swift in Sources */,
 				45AFFD5E241A0E8B00E94F53 /* BarbershopCell.swift in Sources */,
 				45AFFD292418D3AC00E94F53 /* AppDelegate.swift in Sources */,
+				4524C49C24752511008BDD08 /* UserDefaultManager.swift in Sources */,
 				45AFFD4B2418F7FB00E94F53 /* UIImageExtension.swift in Sources */,
+				4524C49A247524F2008BDD08 /* FireManager.swift in Sources */,
 				4585927B241B0FC200C12B54 /* ServiceTableViewCell.swift in Sources */,
 				45859272241B0E0300C12B54 /* ViewController.swift in Sources */,
 				45AFFD502419669E00E94F53 /* User.swift in Sources */,
@@ -516,16 +536,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = QCut/QCut.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MM6R4KM2LB;
+				DEVELOPMENT_TEAM = 84B958MQJD;
 				INFOPLIST_FILE = QCut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.qcut.customer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qcut.ios.customer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -537,16 +559,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = QCut/QCut.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MM6R4KM2LB;
+				DEVELOPMENT_TEAM = 84B958MQJD;
 				INFOPLIST_FILE = QCut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.qcut.customer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qcut.ios.customer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

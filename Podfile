@@ -8,9 +8,12 @@ target 'QCut' do
   use_frameworks!
 
   # Pods for QCut
+
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Storage'
   
   pod 'GoogleSignIn'
   
@@ -23,4 +26,5 @@ target 'QCut' do
   pod 'SVProgressHUD'
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'IMSegmentPageView'
+
 end
