@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -58,7 +58,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-    <string>Using your location to show the distance between you and a barber shop.</string>
+	<string>Using your location to show the distance between you and a barber shop.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Using your location to show the distance between you and a barber shop.</string>
 	<key>UIAppFonts</key>
