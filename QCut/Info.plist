@@ -58,9 +58,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your location is required for xyz benefits for you</string>
+    <string>Using your location to show the distance between you and a barber shop.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is required for xyz benefits for you</string>
+	<string>Using your location to show the distance between you and a barber shop.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Regular.ttf</string>
@@ -69,8 +69,6 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
-		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
