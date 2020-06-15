@@ -15,6 +15,7 @@ class User {
     var photo: String = ""
     var googleID: String = ""
     var fbID: String = ""
+    var appleID: String = ""
     var city: String = "n/a"
     var registeredInApp: Bool = false
 }

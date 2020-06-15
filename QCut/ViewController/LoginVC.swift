@@ -14,6 +14,8 @@ import FirebaseDatabase
 import GoogleSignIn
 import FBSDKCoreKit
 import FBSDKLoginKit
+import CryptoKit
+import AuthenticationServices
 
 class LoginVC: UIViewController {
     
@@ -23,6 +25,7 @@ class LoginVC: UIViewController {
     @IBOutlet weak var signUB: UIButton!
     @IBOutlet weak var facebookUB: UIButton!
     @IBOutlet weak var googleUB: UIButton!
+    @IBOutlet weak var appleUB: UIButton!
     
     @IBOutlet weak var signInButnUIV: UIView!
     var emailMDCController: MDCTextInputControllerOutlined?
@@ -33,7 +36,10 @@ class LoginVC: UIViewController {
     
     var isShowPassword = false
     
-    let loginManager:LoginManager = LoginManager()
+    let loginManager:LoginManager = LoginManager()//google sign in
+    
+    fileprivate var currentNonce: String? // apple sign in
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,6 +82,8 @@ class LoginVC: UIViewController {
         facebookUB.setShadowRadiusToUIView(radius: 10.0)
         
         googleUB.setShadowRadiusToUIView(radius: 10.0)
+        
+        appleUB.setShadowRadiusToUIView(radius: 10.0)
     }
     
     @IBAction func goToSignIn(_ sender: Any) {
@@ -153,6 +161,11 @@ class LoginVC: UIViewController {
         GIDSignIn.sharedInstance().signIn()
     }
     
+    @available(iOS 13, *)
+    @IBAction func onTapAppleUB(_ sender: Any) {
+        startSignInWithAppleFlow()
+    }
+    
     func getFBUserData(){
         if((AccessToken.current) != nil){
             GraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
@@ -176,8 +189,17 @@ class LoginVC: UIViewController {
                                 } else {
                                     self.saveFBUSERInfo(result: result as! [String: Any], userID: (user?.user.uid)!)
                                 }
-                               
+                                UserDefaultManager.setStringData(key: UserDefaultManager.LOGIN_TYPE, val: "facebook")
+                                UserDefaultManager.setBoolData(key: UserDefaultManager.IS_LOGGEDIN, val: true)
+                                UserDefaultManager.setStringData(key: UserDefaultManager.USER_NAME, val: Global.gUser.name)
+                                UserDefaultManager.setStringData(key: UserDefaultManager.USER_EMAIL, val: Global.gUser.email)
+                                UserDefaultManager.setStringData(key: UserDefaultManager.USER_ID, val: Global.gUser.id)
                             })
+                            Global.onhideProgressView()
+                            
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
+                            self.navigationController?.pushViewController(vc, animated: true)
                         }
                         
                     })
@@ -197,8 +219,6 @@ class LoginVC: UIViewController {
             Global.gUser.email = postDict["email"] as! String
             Global.gUser.name = postDict["name"] as! String
             Global.gUser.photo = postDict["photo"] as! String
-            
-            self.gotoNextScreen()
         })
     }
     
@@ -219,23 +239,66 @@ class LoginVC: UIViewController {
         ] as [String : Any]
         
         FireManager.saveDataToFirebase(ref: FireManager.customerRef.child(Global.gUser.id), params: params as [String : AnyObject], success: {result in
-            self.gotoNextScreen()
+            
         })
     }
     
-    func gotoNextScreen() {
-        UserDefaultManager.setStringData(key: UserDefaultManager.LOGIN_TYPE, val: "facebook")
-       UserDefaultManager.setBoolData(key: UserDefaultManager.IS_LOGGEDIN, val: true)
-       UserDefaultManager.setStringData(key: UserDefaultManager.USER_NAME, val: Global.gUser.name)
-       UserDefaultManager.setStringData(key: UserDefaultManager.USER_EMAIL, val: Global.gUser.email)
-       UserDefaultManager.setStringData(key: UserDefaultManager.USER_ID, val: Global.gUser.id)
-       
-       
-       Global.onhideProgressView()
-       
-       let storyboard = UIStoryboard(name: "Main", bundle: nil)
-       let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
-       self.navigationController?.pushViewController(vc, animated: true)
+    func randomNonceString(length: Int = 32) -> String {
+        precondition(length > 0)
+        let charset: Array<Character> =
+            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        var result = ""
+        var remainingLength = length
+        
+        while remainingLength > 0 {
+            let randoms: [UInt8] = (0 ..< 16).map { _ in
+                var random: UInt8 = 0
+                let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+                if errorCode != errSecSuccess {
+                    fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
+                }
+                return random
+            }
+            
+            randoms.forEach { random in
+                if remainingLength == 0 {
+                    return
+                }
+                
+                if random < charset.count {
+                    result.append(charset[Int(random)])
+                    remainingLength -= 1
+                }
+            }
+        }
+        
+        return result
+    }
+    
+    @available(iOS 13, *)
+    func startSignInWithAppleFlow() {
+      let nonce = randomNonceString()
+      currentNonce = nonce
+      let appleIDProvider = ASAuthorizationAppleIDProvider()
+      let request = appleIDProvider.createRequest()
+      request.requestedScopes = [.fullName, .email]
+      request.nonce = sha256(nonce)
+
+      let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+      authorizationController.delegate = self
+      authorizationController.presentationContextProvider = self
+      authorizationController.performRequests()
+    }
+    
+    @available(iOS 13, *)
+    func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            return String(format: "%02x", $0)
+        }.joined()
+        
+        return hashString
     }
 }
 
@@ -289,6 +352,75 @@ extension LoginVC: GIDSignInDelegate {
                 })
             })
         }
+    }
+}
+
+@available(iOS 13.0, *)
+extension LoginVC: ASAuthorizationControllerDelegate {
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("Sign in with Apple errored: \(error)")
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            guard let nonce = currentNonce else {
+                fatalError("Invalid state: A login callback was received, but no login request was sent.")
+            }
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token")
+                return
+            }
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+              print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+              return
+            }
+            
+            //Initialize a Firebase credential
+            let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
+            
+            //Sing in with Firebase
+            Global.onShowProgressView(name: "Connecting...")
+            Auth.auth().signIn(with: credential) {(authResult, error) in
+                if (error != nil) {
+                    Global.onhideProgressView()
+                    print(error!.localizedDescription)
+                    return
+                }
+                Global.gUser.id = (authResult?.user.uid)!
+                Global.gUser.name = (appleIDCredential.fullName?.givenName)! + (appleIDCredential.fullName?.familyName)!
+                Global.gUser.appleID = appleIDCredential.user
+                Global.gUser.email = appleIDCredential.email!
+                
+                let params = [
+                    "id": Global.gUser.id,
+                    "email": Global.gUser.email,
+                    "name": Global.gUser.name,
+                    "appleID": Global.gUser.appleID
+                ] as [String : AnyObject]
+                
+                FireManager.saveDataToFirebase(ref: FireManager.customerRef.child(Global.gUser.id), params: params, success: {(result) in
+                    Global.onhideProgressView()
+                    if result {
+                        UserDefaultManager.setStringData(key: UserDefaultManager.LOGIN_TYPE, val: "apple")
+                        UserDefaultManager.setBoolData(key: UserDefaultManager.IS_LOGGEDIN, val: true)
+                        UserDefaultManager.setStringData(key: UserDefaultManager.USER_NAME, val: Global.gUser.name)
+                        UserDefaultManager.setStringData(key: UserDefaultManager.USER_EMAIL, val: Global.gUser.email)
+                        UserDefaultManager.setStringData(key: UserDefaultManager.USER_ID, val: Global.gUser.id)
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let vc = storyboard.instantiateViewController(withIdentifier: "TabVC") as! TabVC
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                })
+            }
+        }
+    }
+}
+
+@available(iOS 13.0, *)
+extension LoginVC: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
     }
 }
 
